@@ -14,7 +14,7 @@ _ft_strcmp:
     jmp  _ft_strcmp
 
 exit:
-movzx rax, al
+movzx rax, al0
 movzx r8, bl
 sub rax, r8
 ret
