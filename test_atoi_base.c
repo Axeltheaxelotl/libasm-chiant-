@@ -67,5 +67,13 @@ int main(void)
     printf("  \"+-42\" base \"0123456789\" = %d (attendu: -42)\n", 
            ft_atoi_base("+-42", "0123456789"));
     
+
+
+           printf("\n Le test pour le putain de ft_atoi_base\n");
+               printf("%d\n", ft_atoi_base("101", "01"));           // 5
+    printf("%d\n", ft_atoi_base("  -2a", "0123456789abcdef")); // -42
+    printf("%d\n", ft_atoi_base("123", "0123456789"));   // 123
+    printf("%d\n", ft_atoi_base("zzz", "0123456789"));   // 0 (base invalide)
     return 0;
+
 }

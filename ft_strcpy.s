@@ -1,6 +1,6 @@
-global _ft_strcopy
+global ft_strcpy
 
-_ft_strcopy:
+ft_strcpy:
     mov rax, 0
     jmp niquetamere
 

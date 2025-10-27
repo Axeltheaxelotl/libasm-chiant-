@@ -1,7 +1,7 @@
 ;rdi = pointeur vers string
 ;rax = pointeur apres les espaces
 skip_whitespaces:
-    max rax, rdi ; copier le pointeur
+    mov rax, rdi ; copier le pointeur
 
 .loop:
     movzx rcx, byte [rax]
@@ -16,13 +16,13 @@ skip_whitespaces:
     cmp cl, 11
     je .skip
     cmp cl, 12
-    je .ckip
-    cmp clm 13
+    je .skip
+    cmp cl, 13
     je .skip
 
     ret ; ce n est pas un espace, on retourne
 
-.skip
+.skip:
     inc rax ; avance au caratere suivant
     jmp .loop
 
@@ -36,20 +36,20 @@ parse_sign:
     mov rax, rdi ; copier le pointeur
     mov rdx, 1 ; sign positif par defaut
 
-.loop
+.loop:
     movzx rcx, byte [rax]; charger le caractere
     cmp cl , '+'
     je .skip ; ne change rien skip
     cmp cl, '-'
-    je .done ; ni + ni -, on a fini
+    jne .done ; ni + ni -, on a fini
     neg rdx ; inverse le signe
 
-.skip
+.skip:
     inc rax ; caractere suivant
     jmp .loop
 
 .done:
-    ret 
+    ret
 
 
 
@@ -149,7 +149,7 @@ validate_base:
     cmp dil, al ; doublon ?
     je .invalid
     inc rdx
-    jmp check_duplicate
+    jmp .check_duplicates
 
 .next_char:
     inc rcx
@@ -251,7 +251,32 @@ ft_atoi_base:
 
     ;etape 3 gerer les putains de signe de mes couilles
     mov r15, 1 ; sign par default
-    
+    mov rdi, r12
+    call parse_sign
+    mov r12, rax ; r12 = pointeur apres signes
+    mov r15, rdx ; r15 = sign (-1 ou 1)
+
+    ;etape 4 convertir le putain de nombre de mes couilles
+    mov rdi, r12
+    mov rsi, r13
+    mov rdx, r14
+    call convert_number
+
+    ;la putain d etape 5 appliquer le putain de signe de mes couilles
+    imul rax, r15
+    jmp .return
+
+.return_zero:
+    xor rax, rax
+
+.return:
+    ; restaurer les registres
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    ret
 
 
 
