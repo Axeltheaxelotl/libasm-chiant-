@@ -8,7 +8,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -no-pie
 
 # Fichiers
-ASM_SRC = ft_strlen.s ft_strcpy.s ft_write.s ft_atoi_base.s ft_strdup.s ft_read.s
+ASM_SRC = ft_strlen.s ft_strcpy.s ft_write.s ft_atoi_base.s ft_strdup.s ft_read.s ft_list_size.s ft_list_push_front.s
 C_SRC = main.c
 ASM_OBJ = $(ASM_SRC:.s=.o)
 C_OBJ = $(C_SRC:.c=.o)

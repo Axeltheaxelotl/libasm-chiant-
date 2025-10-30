@@ -1,12 +1,21 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+
+// Définition de la structure de liste
+typedef struct s_list {
+	void *data;
+	struct s_list *next;
+} t_list;
 
 // Déclaration de la fonction assembleur
 size_t ft_strlen(const char *str);
 // changed: return type adjusted to match strcpy-like behaviour
 char *ft_strcpy(const char *src, char *dst);
 ssize_t ft_write(int fd, const void *buf, size_t count);
+void ft_list_push_front(t_list **begin_list, void *data);
+int ft_list_size(t_list *begin_list);
 
 int main(void)
 {
@@ -128,6 +137,93 @@ int main(void)
 	printf("  write retour:    %zd\n", ret_write_std);
 	ret_write = ft_write(-1, msg1, strlen(msg1));
 	printf("  ft_write retour: %zd\n\n", ret_write);
+
+	// --- Tests pour ft_list_push_front et ft_list_size ---
+	printf("=== Test de ft_list_push_front et ft_list_size ===\n\n");
+
+	t_list *list = NULL;
+	
+	// Test 1 : liste vide
+	printf("Test 1: Liste vide\n");
+	printf("  Taille de la liste: %d\n", ft_list_size(list));
+	printf("  Liste: NULL\n\n");
+
+	// Test 2 : ajouter un premier élément
+	printf("Test 2: Ajouter \"Premier\"\n");
+	ft_list_push_front(&list, "Premier");
+	printf("  Taille de la liste: %d\n", ft_list_size(list));
+	printf("  Premier élément: %s\n\n", (char *)list->data);
+
+	// Test 3 : ajouter un deuxième élément
+	printf("Test 3: Ajouter \"Deuxième\"\n");
+	ft_list_push_front(&list, "Deuxième");
+	printf("  Taille de la liste: %d\n", ft_list_size(list));
+	printf("  Premier élément: %s\n", (char *)list->data);
+	printf("  Deuxième élément: %s\n\n", (char *)list->next->data);
+
+	// Test 4 : ajouter un troisième élément
+	printf("Test 4: Ajouter \"Troisième\"\n");
+	ft_list_push_front(&list, "Troisième");
+	printf("  Taille de la liste: %d\n", ft_list_size(list));
+	printf("  Liste complète (du début à la fin):\n");
+	t_list *current = list;
+	int i = 1;
+	while (current)
+	{
+		printf("    [%d] %s\n", i++, (char *)current->data);
+		current = current->next;
+	}
+	printf("\n");
+
+	// Test 5 : ajouter plusieurs éléments
+	printf("Test 5: Ajouter 3 éléments supplémentaires\n");
+	ft_list_push_front(&list, "Quatrième");
+	ft_list_push_front(&list, "Cinquième");
+	ft_list_push_front(&list, "Sixième");
+	printf("  Taille de la liste: %d\n", ft_list_size(list));
+	printf("  Liste complète:\n");
+	current = list;
+	i = 1;
+	while (current)
+	{
+		printf("    [%d] %s\n", i++, (char *)current->data);
+		current = current->next;
+	}
+	printf("\n");
+
+	// Test 6 : tester avec des entiers
+	printf("Test 6: Tester avec des entiers\n");
+	t_list *int_list = NULL;
+	int val1 = 42, val2 = 21, val3 = 84;
+	ft_list_push_front(&int_list, &val1);
+	ft_list_push_front(&int_list, &val2);
+	ft_list_push_front(&int_list, &val3);
+	printf("  Taille de la liste d'entiers: %d\n", ft_list_size(int_list));
+	printf("  Liste d'entiers:\n");
+	current = int_list;
+	i = 1;
+	while (current)
+	{
+		printf("    [%d] %d\n", i++, *(int *)current->data);
+		current = current->next;
+	}
+	printf("\n");
+
+	// Libération de la mémoire (optionnel, pour être propre)
+	printf("Libération de la mémoire...\n");
+	while (list)
+	{
+		t_list *temp = list;
+		list = list->next;
+		free(temp);
+	}
+	while (int_list)
+	{
+		t_list *temp = int_list;
+		int_list = int_list->next;
+		free(temp);
+	}
+	printf("Mémoire libérée.\n\n");
 
 	return (0);
 }
