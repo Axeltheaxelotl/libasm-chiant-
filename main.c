@@ -16,6 +16,7 @@ char *ft_strcpy(const char *src, char *dst);
 ssize_t ft_write(int fd, const void *buf, size_t count);
 void ft_list_push_front(t_list **begin_list, void *data);
 int ft_list_size(t_list *begin_list);
+void ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
 
 int main(void)
 {
@@ -224,6 +225,282 @@ int main(void)
 		free(temp);
 	}
 	printf("Mémoire libérée.\n\n");
+
+	// --- Tests pour ft_list_remove_if ---
+	printf("=== Test de ft_list_remove_if ===\n\n");
+
+	// Fonctions de comparaison et de libération pour les tests
+	int cmp_str(char *s1, char *s2)
+	{
+		return strcmp(s1, s2);
+	}
+
+	int cmp_int(int *n1, int *n2)
+	{
+		return (*n1 - *n2);
+	}
+
+	void free_str(void *ptr)
+	{
+		// Pour les chaînes littérales, on ne libère pas
+		// Dans un cas réel avec strdup, il faudrait free(ptr)
+		(void)ptr;
+	}
+
+	void free_int(void *ptr)
+	{
+		// Pour les entiers sur la pile, on ne libère pas
+		(void)ptr;
+	}
+
+	// Test 1 : Supprimer un élément en tête
+	printf("Test 1: Supprimer élément en TÊTE\n");
+	t_list *test_list1 = NULL;
+	ft_list_push_front(&test_list1, "Trois");
+	ft_list_push_front(&test_list1, "Deux");
+	ft_list_push_front(&test_list1, "Un");
+	
+	printf("  Liste avant: ");
+	current = test_list1;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	
+	ft_list_remove_if(&test_list1, "Un", (int (*)())cmp_str, free_str);
+	
+	printf("  Liste après suppression de \"Un\": ");
+	current = test_list1;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n\n", ft_list_size(test_list1));
+
+	// Test 2 : Supprimer un élément au milieu
+	printf("Test 2: Supprimer élément au MILIEU\n");
+	ft_list_push_front(&test_list1, "Un"); // Liste: Un -> Deux -> Trois
+	
+	printf("  Liste avant: ");
+	current = test_list1;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	
+	ft_list_remove_if(&test_list1, "Deux", (int (*)())cmp_str, free_str);
+	
+	printf("  Liste après suppression de \"Deux\": ");
+	current = test_list1;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n\n", ft_list_size(test_list1));
+
+	// Test 3 : Supprimer un élément en fin
+	printf("Test 3: Supprimer élément en FIN\n");
+	
+	printf("  Liste avant: ");
+	current = test_list1;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	
+	ft_list_remove_if(&test_list1, "Trois", (int (*)())cmp_str, free_str);
+	
+	printf("  Liste après suppression de \"Trois\": ");
+	current = test_list1;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n\n", ft_list_size(test_list1));
+
+	// Libérer test_list1
+	while (test_list1)
+	{
+		t_list *temp = test_list1;
+		test_list1 = test_list1->next;
+		free(temp);
+	}
+
+	// Test 4 : Supprimer PLUSIEURS éléments (doublons)
+	printf("Test 4: Supprimer PLUSIEURS éléments identiques\n");
+	t_list *test_list2 = NULL;
+	ft_list_push_front(&test_list2, "C");
+	ft_list_push_front(&test_list2, "A");
+	ft_list_push_front(&test_list2, "B");
+	ft_list_push_front(&test_list2, "A");
+	ft_list_push_front(&test_list2, "C");
+	ft_list_push_front(&test_list2, "A");
+	
+	printf("  Liste avant: ");
+	current = test_list2;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n", ft_list_size(test_list2));
+	
+	ft_list_remove_if(&test_list2, "A", (int (*)())cmp_str, free_str);
+	
+	printf("  Liste après suppression de tous les \"A\": ");
+	current = test_list2;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n\n", ft_list_size(test_list2));
+
+	// Libérer test_list2
+	while (test_list2)
+	{
+		t_list *temp = test_list2;
+		test_list2 = test_list2->next;
+		free(temp);
+	}
+
+	// Test 5 : Supprimer TOUS les éléments
+	printf("Test 5: Supprimer TOUS les éléments\n");
+	t_list *test_list3 = NULL;
+	ft_list_push_front(&test_list3, "X");
+	ft_list_push_front(&test_list3, "X");
+	ft_list_push_front(&test_list3, "X");
+	
+	printf("  Liste avant: ");
+	current = test_list3;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n", ft_list_size(test_list3));
+	
+	ft_list_remove_if(&test_list3, "X", (int (*)())cmp_str, free_str);
+	
+	printf("  Liste après suppression de tous les \"X\": ");
+	if (test_list3 == NULL)
+		printf("NULL (liste vide)\n");
+	else
+	{
+		current = test_list3;
+		while (current)
+		{
+			printf("[%s] -> ", (char *)current->data);
+			current = current->next;
+		}
+		printf("NULL\n");
+	}
+	printf("  Taille: %d\n\n", ft_list_size(test_list3));
+
+	// Test 6 : Supprimer dans une liste d'entiers
+	printf("Test 6: Supprimer dans une liste d'ENTIERS\n");
+	t_list *test_list4 = NULL;
+	int v1 = 10, v2 = 42, v3 = 21, v4 = 42, v5 = 99, v6 = 42;
+	ft_list_push_front(&test_list4, &v6);
+	ft_list_push_front(&test_list4, &v5);
+	ft_list_push_front(&test_list4, &v4);
+	ft_list_push_front(&test_list4, &v3);
+	ft_list_push_front(&test_list4, &v2);
+	ft_list_push_front(&test_list4, &v1);
+	
+	printf("  Liste avant: ");
+	current = test_list4;
+	while (current)
+	{
+		printf("[%d] -> ", *(int *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n", ft_list_size(test_list4));
+	
+	int ref = 42;
+	ft_list_remove_if(&test_list4, &ref, (int (*)())cmp_int, free_int);
+	
+	printf("  Liste après suppression de tous les 42: ");
+	current = test_list4;
+	while (current)
+	{
+		printf("[%d] -> ", *(int *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n\n", ft_list_size(test_list4));
+
+	// Libérer test_list4
+	while (test_list4)
+	{
+		t_list *temp = test_list4;
+		test_list4 = test_list4->next;
+		free(temp);
+	}
+
+	// Test 7 : Supprimer dans une liste vide (edge case)
+	printf("Test 7: Supprimer dans une LISTE VIDE\n");
+	t_list *test_list5 = NULL;
+	
+	printf("  Liste avant: NULL\n");
+	ft_list_remove_if(&test_list5, "X", (int (*)())cmp_str, free_str);
+	printf("  Liste après: NULL\n");
+	printf("  Taille: %d\n\n", ft_list_size(test_list5));
+
+	// Test 8 : Supprimer un élément qui n'existe pas
+	printf("Test 8: Supprimer un élément INEXISTANT\n");
+	t_list *test_list6 = NULL;
+	ft_list_push_front(&test_list6, "C");
+	ft_list_push_front(&test_list6, "B");
+	ft_list_push_front(&test_list6, "A");
+	
+	printf("  Liste avant: ");
+	current = test_list6;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d\n", ft_list_size(test_list6));
+	
+	ft_list_remove_if(&test_list6, "Z", (int (*)())cmp_str, free_str);
+	
+	printf("  Liste après tentative de suppression de \"Z\": ");
+	current = test_list6;
+	while (current)
+	{
+		printf("[%s] -> ", (char *)current->data);
+		current = current->next;
+	}
+	printf("NULL\n");
+	printf("  Taille: %d (doit être inchangée)\n\n", ft_list_size(test_list6));
+
+	// Libérer test_list6
+	while (test_list6)
+	{
+		t_list *temp = test_list6;
+		test_list6 = test_list6->next;
+		free(temp);
+	}
+
+	printf("Tous les tests de ft_list_remove_if terminés!\n\n");
 
 	return (0);
 }
