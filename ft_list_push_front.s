@@ -1,7 +1,8 @@
-    ;typedef struct s_list{
-    ;    void *data; // 8 bites
-    ;    struct s_list *next; // 8 bites
-    ;} t_list; // total 16 bites
+; Ajoute un nouvel élément au début d'une liste chaînée
+;typedef struct s_list{
+;    void *data; // 8 bites
+;    struct s_list *next; // 8 bites
+;} t_list; // total 16 bites
 
 global ft_list_push_front
 extern malloc

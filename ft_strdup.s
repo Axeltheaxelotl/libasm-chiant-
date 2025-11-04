@@ -1,3 +1,4 @@
+; Duplique une chaîne de caractères (allocation dynamique)
 global ft_strdup
 extern malloc
 extern ft_strlen

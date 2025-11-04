@@ -1,3 +1,4 @@
+; Lit depuis un descripteur de fichier (wrapper syscall read)
 global ft_read
 
 ft_read:

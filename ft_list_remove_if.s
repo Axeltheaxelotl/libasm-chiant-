@@ -1,3 +1,4 @@
+; Supprime les éléments d'une liste qui correspondent à un critère
 ; ChatGPT : La fonction parcourt la liste chaînée et supprime tous les nœuds dont
 ; la donnée est égale à la valeur donnée, en libérant proprement leur mémoire
 section .text
@@ -12,6 +13,7 @@ ft_list_remove_if:
     push r14
     push r15
     push rbx
+    
 
     test rdi, rdi
     jz .return

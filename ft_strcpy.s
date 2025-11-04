@@ -1,3 +1,4 @@
+; Copie une chaîne de caractères depuis src vers dest
 global ft_strcpy
 
 ft_strcpy:
@@ -6,13 +7,13 @@ ft_strcpy:
 
 niquetamere:
     cmp BYTE [rdi + rax], 0
-    je exit2
+    je exit
     mov cl, [rdi + rax]
     mov [rsi + rax], cl
     inc rax
     jmp niquetamere
 
-exit2:
+exit:
     mov BYTE [rsi + rax], 0
     mov rax, rsi
     ret

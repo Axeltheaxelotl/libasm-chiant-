@@ -1,3 +1,4 @@
+; Compare deux chaînes de caractères (retourne différence)
 global _ft_strcmp
 
 _ft_strcmp:

@@ -1,3 +1,4 @@
+; Convertit une chaîne en nombre selon une base donnée
 ;rdi = pointeur vers string
 ;rax = pointeur apres les espaces
 skip_whitespaces:

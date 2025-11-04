@@ -1,3 +1,4 @@
+; Calcule la longueur d'une chaîne de caractères
 global ft_strlen
 
 ft_strlen:

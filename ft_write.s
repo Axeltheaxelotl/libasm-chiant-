@@ -1,3 +1,4 @@
+; Écrit dans un descripteur de fichier (wrapper syscall write)
 global ft_write
 
 ft_write:

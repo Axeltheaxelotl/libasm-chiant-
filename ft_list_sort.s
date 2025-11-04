@@ -1,3 +1,4 @@
+; Trie une liste chaînée avec une fonction de comparaison
 global ft_list_sort
 
 ft_list_sort:

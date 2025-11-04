@@ -1,3 +1,4 @@
+; Compte le nombre d'éléments dans une liste chaînée
 global ft_list_size
 
 ft_list_size:
