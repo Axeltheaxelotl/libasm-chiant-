@@ -1,6 +1,10 @@
 ; Convertit une chaîne en nombre selon une base donnée
 ;rdi = pointeur vers string
 ;rax = pointeur apres les espaces
+
+section .text
+    global ft_atoi_base
+
 skip_whitespaces:
     mov rax, rdi ; copier le pointeur
 

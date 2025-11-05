@@ -1,7 +1,8 @@
 ; Compare deux chaînes de caractères (retourne différence)
-global _ft_strcmp
+section .text
+    global ft_strcmp
 
-_ft_strcmp:
+ft_strcmp:
     mov al, BYTE [rdi]
     mov bl, BYTE [rsi]
     cmp al, 0
@@ -12,7 +13,7 @@ _ft_strcmp:
     jne exit
     inc rdi
     inc rsi
-    jmp  _ft_strcmp
+    jmp  ft_strcmp
 
 exit:
 movzx rax, al0

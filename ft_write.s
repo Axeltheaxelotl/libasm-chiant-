@@ -1,5 +1,6 @@
 ; Écrit dans un descripteur de fichier (wrapper syscall write)
-global ft_write
+section .text
+    global ft_write
 
 ft_write:
     mov rax, 1

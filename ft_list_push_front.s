@@ -4,8 +4,9 @@
 ;    struct s_list *next; // 8 bites
 ;} t_list; // total 16 bites
 
-global ft_list_push_front
-extern malloc
+section .text
+    global ft_list_push_front
+    extern malloc
 
 ;rdi = t_list **begin_list
 ;rsi = void *data

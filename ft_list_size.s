@@ -1,5 +1,6 @@
 ; Compte le nombre d'éléments dans une liste chaînée
-global ft_list_size
+section .text
+    global ft_list_size
 
 ft_list_size:
     xor rax, rax ; initialise le fils de pute de compteur a 0

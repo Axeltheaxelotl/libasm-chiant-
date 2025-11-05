@@ -1,8 +1,10 @@
 ; Duplique une chaîne de caractères (allocation dynamique)
-global ft_strdup
-extern malloc
-extern ft_strlen
-extern ft_strcpy
+
+section .text
+    global ft_strdup
+    extern malloc
+    extern ft_strlen
+    extern ft_strcpy
 
 ft_strdup:
     call ft_strlen

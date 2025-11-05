@@ -1,5 +1,8 @@
 ; Calcule la longueur d'une chaîne de caractères
-global ft_strlen
+
+section .text
+	global ft_strlen
+
 
 ft_strlen:
 	mov		rax, 0

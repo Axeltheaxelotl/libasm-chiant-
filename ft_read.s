@@ -1,5 +1,7 @@
 ; Lit depuis un descripteur de fichier (wrapper syscall read)
-global ft_read
+
+section .text
+    global ft_read 
 
 ft_read:
     mov rax, 0
